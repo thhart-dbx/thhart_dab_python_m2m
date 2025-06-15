@@ -1,0 +1,37 @@
+resources:
+  jobs:
+    thhart_dab_python_job_yml:
+      name: thhart_dab_python_job_yml
+
+      trigger:
+        periodic:
+          interval: 1
+          unit: DAYS
+      
+      email_notifications:
+        on_failure:
+          - thomas.hart@databricks.com
+
+      environments:
+        - environment_key: default
+          spec:
+            client: '1'
+
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+        - name: bundle_target
+          default: ${bundle.target}
+
+      tasks:
+        - task_key: orders_raw
+          notebook_task:
+            notebook_path: ./orders_raw.ipynb
+            
+        - task_key: orders_daily
+          depends_on:
+            - task_key: orders_raw
+          notebook_task:
+            notebook_path: ./orders_daily.ipynb

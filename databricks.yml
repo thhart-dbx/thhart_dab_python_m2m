@@ -1,0 +1,34 @@
+bundle:
+  name: thhart_dab_python
+
+include:
+  - ./*.job.yml
+
+# specify variables but do not assign values
+variables:
+  catalog: 
+    description: The catalog to use
+  schema:
+    description: The schema to use
+
+# specify variables values in targets
+targets:
+  
+  # where do we want to develop
+  thhart_target_dev:
+    mode: development
+    default: true
+    workspace: 
+      host: https://dbc-446db140-571a.cloud.databricks.com
+    variables:
+      catalog: thhart
+      schema: dab_python_dev
+  
+  # where do we want to run in production
+  thhart_target_prod:
+    mode: production
+    workspace: 
+      host: https://dbc-446db140-571a.cloud.databricks.com
+    variables:
+      catalog: thhart
+      schema: dab_python_prod
